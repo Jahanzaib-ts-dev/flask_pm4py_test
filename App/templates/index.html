@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Upload CSV</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Upload CSV File</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data" class="mt-4">
+        <div class="form-group">
+            <input type="file" name="file" class="form-control-file">
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+    
+    {% if columns %}
+    <div class="mt-4">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="bpmn-tab" data-toggle="tab" href="#bpmn" role="tab" aria-controls="bpmn" aria-selected="true">BPMN Model</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="process-tree-tab" data-toggle="tab" href="#process-tree" role="tab" aria-controls="process-tree" aria-selected="false">Process Tree</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="bpmn" role="tabpanel" aria-labelledby="bpmn-tab">
+                <form action="/process" method="post">
+                    <div class="form-group">
+                        <label for="case_id">Select Case ID:</label>
+                        <select class="form-control" id="case_id" name="case_id">
+                            {% for column in columns %}
+                            <option value="{{ column }}">{{ column }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="activity_key">Select Activity Key:</label>
+                        <select class="form-control" id="activity_key" name="activity_key">
+                            {% for column in columns %}
+                            <option value="{{ column }}">{{ column }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="timestamp_key">Select Timestamp Key:</label>
+                        <select class="form-control" id="timestamp_key" name="timestamp_key">
+                            {% for column in columns %}
+                            <option value="{{ column }}">{{ column }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <input type="hidden" name="file_path" value="{{ file_path }}">
+                    <button type="submit" class="btn btn-primary">Process</button>
+                </form>
+                {% if image_url_bpmn %}
+                <div class="mt-5">
+                    <h2 class="text-center">BPMN Model</h2>
+                    <div class="text-center">
+                        <img src="{{ image_url_bpmn }}" alt="BPMN Model" class="img-fluid">
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="tab-pane fade" id="process-tree" role="tabpanel" aria-labelledby="process-tree-tab">
+                {% if image_url_tree %}
+                <div class="mt-5">
+                    <h2 class="text-center">Process Tree</h2>
+                    <div class="text-center">
+                        <img src="{{ image_url_tree }}" alt="Process Tree" class="img-fluid">
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
